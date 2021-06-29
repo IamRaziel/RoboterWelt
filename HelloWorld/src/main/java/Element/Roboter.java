@@ -17,12 +17,30 @@ public class Roboter extends Element
 {
     private Blickrichtung blickrichtung;
     private Element aufgehobenesElement;
+    private boolean isInHaus;
 
     public Roboter(int posX, int posY)
     {
         super(posX, posY);
         blickrichtung = Blickrichtung.RECHTS;
+        isInHaus = false;
         loadImage();
+    }
+
+    public void setBlickrichtung(Blickrichtung b)
+    {
+        blickrichtung = b;
+        loadImage();
+    }
+
+    public boolean isInHaus()
+    {
+        return isInHaus;
+    }
+
+    public void setInHaus(boolean isInHaus)
+    {
+        this.isInHaus = isInHaus;
     }
 
     public void schritt()
@@ -30,6 +48,48 @@ public class Roboter extends Element
         posX += diffX();
         posY += diffY();
     }
+
+    public boolean feldIstFrei(Set<Element> allElements, int bPosX, int bPosY)
+    {
+        int aPosX = posX + diffX();
+        int aPosY = posY + diffY();
+
+       if (aPosX < 0 || aPosY < 0)
+       {
+           return false;
+       }
+       if (bPosX <= aPosX || bPosY <= aPosY)
+       {
+           return false;
+       }
+       for (Element e : allElements)
+        {
+            if (e.getPosX() == aPosX && e.getPosY() == aPosY)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public Haus isHaus(Set<Element> allElements)
+    {
+        int aPosX = posX + diffX();
+        int aPosY = posY + diffY();
+
+        for(Element e : allElements)
+        {
+            if (e.getPosX() == aPosX && e.getPosY() == aPosY)
+            {
+                if (e instanceof Haus)
+                {
+                    return (Haus)e;
+                }
+            }
+        }
+        return null;
+    }
+
 
     public boolean aufheben(Set<Element> allElements)
     {
@@ -98,6 +158,28 @@ public class Roboter extends Element
             blickrichtung = Blickrichtung.OBEN;
         }
         else if (alt == Blickrichtung.OBEN)
+        {
+            blickrichtung = Blickrichtung.LINKS;
+        }
+        loadImage();
+    }
+
+    public void dreheRechts()
+    {
+        Blickrichtung alt = blickrichtung;
+        if (alt == Blickrichtung.LINKS)
+        {
+            blickrichtung = Blickrichtung.OBEN;
+        }
+        else if (alt == Blickrichtung.OBEN)
+        {
+            blickrichtung = Blickrichtung.RECHTS;
+        }
+        else if (alt == Blickrichtung.RECHTS)
+        {
+            blickrichtung = Blickrichtung.UNTEN;
+        }
+        else if (alt == Blickrichtung.UNTEN)
         {
             blickrichtung = Blickrichtung.LINKS;
         }

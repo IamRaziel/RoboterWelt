@@ -32,9 +32,11 @@ public class Map extends JFrame
     private int width, height;
     private JPanel hintergrund = new JPanel();
     private JButton button;
+    private JButton btnSchritt;
+    private JButton btnaufheben;
     private Set<Element> elements = new HashSet();
 
-    public Map(int width, int height, ActionListener al)
+    public Map(int width, int height, ActionListener al, ActionListener al2, ActionListener al3)
     {
         this.width = width;
         this.height = height;
@@ -48,6 +50,14 @@ public class Map extends JFrame
         button.addActionListener(al);
         hintergrund.add(button);
 
+        btnSchritt = new JButton("schritt");
+        btnSchritt.addActionListener(al2);
+        hintergrund.add(btnSchritt);
+
+        btnaufheben = new JButton ("aufheben");
+        btnaufheben.addActionListener(al3);
+        hintergrund.add(btnaufheben);
+
         this.setSize(new Dimension(w, h));
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setContentPane(hintergrund);
@@ -58,6 +68,14 @@ public class Map extends JFrame
         paintElements();
     }
 
+    public int getMaxY()
+    {
+        return height;
+    }
+    public int getMaxX()
+    {
+        return width;
+    }
 
     public boolean addElement(Element e)
     {
